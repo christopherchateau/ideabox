@@ -1,0 +1,46 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100%;
+}
+
+header {
+  background-color: #E5F3F2;
+  height: 30%
+}
+
+h1 {
+  color: #00A79D;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  text-align: center;
+}
+
+span {
+  color: #6D6E71;
+}
+
+main {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  height: 70%;
+}
+
+button {
+  color: #00A79D;
+  text-align: center;
+}
+
+button:hover {
+  color: #045E55;
+}
+
+/*Example text: #6D6E71
+Example p text: #939598
+Quality text: #6D6E71
+Border: #D1D3D4
+*/
