@@ -35,8 +35,17 @@ button {
   text-align: center;
 }
 
+button:disabled {
+  color: #D3D3D3;
+}
+
 button:hover {
   color: #045E55;
+}
+
+.icons {
+  height: 45px;
+  width: 45px;
 }
 
 /*Example text: #6D6E71
