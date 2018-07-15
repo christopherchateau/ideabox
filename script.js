@@ -2,9 +2,10 @@ var titleInput = $('.title-input');
 var bodyInput = $('.body-input');
 var saveButton = $('.save-button');
 var searchInput = $('.search-input');
-var deleteButton = $('.delete-button');
+var deleteButton;
 var counter = 0;
 var cardArr = [];
+var qualityArr = ['swill', 'plausible', 'genius'];
 var idea;
 var container = $('.populated-ideas-container');
 
@@ -13,7 +14,8 @@ var container = $('.populated-ideas-container');
 titleInput.on('keyup', toggleSaveButton);
 bodyInput.on('keyup', toggleSaveButton);
 saveButton.on('click', saveNewIdea);
-deleteButton.on('click', deleteIdeaCard);
+$('.populated-ideas-container').click(deleteIdeaCard);
+// $('[src="delete.svg"]').on('mouseover', deleteButtonToRed);
 
 
 function saveNewIdea(e) {
@@ -29,7 +31,6 @@ function Idea(id, title, body) {
   this.title = title;
   this.body = body;
   this.quality = 'swill';
-
 }
 
 function createNewIdeaCard() {
@@ -40,11 +41,13 @@ function createNewIdeaCard() {
   $('.populated-ideas-container').prepend(
 
     `<article class="populated-ideas"><h2 class="idea-title">${ideaTitle}</h2>
-      <img class="icons delete-button" src="delete.svg">
+     <button class="delete-button"></button>
      <p>${ideaBody}</p>
-     <img class="icons upvote-icon" src="upvote.svg"/>
-     <img class="icons downvote-icon" src="downvote.svg"/>
-     <h3>quality: <span class="quality">${ideaQuality}</span></h3></article>`
+     <section class="quality-flex">
+     <button class="icons upvote-icon"</button>
+     <button class="icons downvote-icon"</button>
+     <h3>quality: <span class="quality">${ideaQuality}</span></h3></article>
+     </section>`
     );
 }
 
@@ -53,16 +56,44 @@ Idea.prototype.createIdeaCard = function () {
   cardArr.push(idea);
 }
 
-function deleteIdeaCard() {
-  console.log('asdf');
-
+function deleteIdeaCard(e) {
+  if ($(e.target).is('.delete-button')) {
+    $(e.target).parent().remove();
+    // localStorage().removeItem();
+  }
+  if ($(e.target).is('.downvote-icon')) {
+    console.log((e.target))
+    qualityDowngrade();  
+  }
+  if ($(e.target).is('.upvote-icon')) {
+    qualityUpgrade();  
+  }
 }
 
+function qualityUpgrade() {
+  if (idea.quality === 'swill') {
+    (idea.quality = 'plausible');
+  } else if (idea.quality === 'plausible') {
+    (idea.quality = 'genius');
+  }
+  $('.quality').text(idea.quality);
+}
+
+function qualityDowngrade() {
+  if (idea.quality === 'genius') {
+    (idea.quality = 'plausible');
+  } else if (idea.quality === 'plausible') {
+    (idea.quality = 'swill');
+  }
+  $('.quality').text(idea.quality);
+}
 
 function toggleSaveButton() {
   if (titleInput.val() !== '' && bodyInput.val() !== '') {
-    saveButton.disabled = false;
+    $(".save-button").prop("disabled", false);
   } else {
-    saveButton.disabled = true;
+    $(".save-button").prop("disabled", true);
   }
 }
+
+
