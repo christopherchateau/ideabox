@@ -1,7 +1,7 @@
 var titleInput = $('.title-input');
 var bodyInput = $('.body-input');
 var saveButton = $('.save-button');
-var searchInput = $('.search-input');
+// var searchInput = $('.search-input');
 var deleteButton;
 var counter = 0;
 var cardArr = [];
@@ -10,11 +10,11 @@ var idea;
 var container = $('.populated-ideas-container');
 
 
-
 titleInput.on('keyup', toggleSaveButton);
 bodyInput.on('keyup', toggleSaveButton);
 saveButton.on('click', saveNewIdea);
 $('.populated-ideas-container').click(deleteIdeaCard);
+$('.search-input').keyup(search);
 // $('[src="delete.svg"]').on('mouseover', deleteButtonToRed);
 
 
@@ -40,14 +40,14 @@ function createNewIdeaCard() {
 
   $('.populated-ideas-container').prepend(
 
-    `<article class="populated-ideas"><h2 class="idea-title">${ideaTitle}</h2>
+    `<article class="populated-ideas"><h2 contenteditable="true" class="idea-title">${ideaTitle}</h2>
      <button class="delete-button"></button>
-     <p>${ideaBody}</p>
+     <p contenteditable = "true">${ideaBody}</p>
      <section class="quality-flex">
      <button class="icons upvote-icon"</button>
      <button class="icons downvote-icon"</button>
-     <h3>quality: <span class="quality">${ideaQuality}</span></h3></article>
-     </section>`
+     <h3>quality: <span class="quality">${ideaQuality}</span></h3>
+     </section></article>`
     );
 }
 
@@ -94,6 +94,32 @@ function toggleSaveButton() {
   } else {
     $(".save-button").prop("disabled", true);
   }
+}
+
+function search() {
+  var searchInput = $('.search-input');
+  var populatedIdeas = $('.populated-ideas');
+  var filter = searchInput.val().toUpperCase();
+    console.log(populatedIdeas);
+
+
+  // for (var i = 0; i < populatedIdeas.length; i++) {
+  //   var input = populatedIdeas[i].getElementsByTagName('article');
+  //   if (input.html().toUpperCase().indexOf(filter) > -1) {
+  //     populatedIdeas[i].style.display = '';
+  //   } else {
+  //     populatedIdeas[i].style.display = 'none';
+  //   }
+  // }
+
+  // result = $('searchInput').val();
+  // $('.search-input').each(function() {
+  //   $('.populated-ideas:contains("'+result+'")').show();
+
+  //   if ($(this).text().toUpperCase().indexOf(result.toUpperCase()) !== -1) {
+  //     $(this).show();
+  //}
+  //});
 }
 
 

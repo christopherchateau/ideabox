@@ -104,6 +104,10 @@ p {
   color: #939598;
 }
 
+p:focus {
+  outline: none;
+}
+
 .delete-button {
   height: 1.5em;
   width: 1.5em;
@@ -130,9 +134,15 @@ h3 {
   font-family: 'Roboto Slab', serif;
   color: #6D6E71;
   font-size: .8em;
-  margin-left: 3em;
   width: 15em;
   text-align: left;
+  position: relative;
+  left: 3em;
+
+}
+
+h2:focus {
+  outline: none;
 }
 
 .downvote-icon {
