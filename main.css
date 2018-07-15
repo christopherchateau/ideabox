@@ -22,6 +22,12 @@ h1 {
   font-size: 2.3em;
 }
 
+main {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  /*height: 70%;*/
+}
+
 span {
   color: #6D6E71;
 }
@@ -58,17 +64,11 @@ input {
 }
 
 .save-button:disabled {
-  color: #D3D3D3;
+  background-color: #D3D3D3;  
 }
 
 .save-button:hover {
   background-color: #045E55;
-}
-
-main {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 400;
-  height: 70%;
 }
 
 .search-input {
@@ -105,19 +105,60 @@ p {
 }
 
 .delete-button {
+  height: 1.5em;
+  width: 1.5em;
+  background-image: url(delete.svg);
   float: right;
   margin: .25em;
+  border: none;
+}
+
+.delete-button:focus {
+  outline: none;
+}
+
+.delete-button:hover {
+  background-image: url(delete-hover.svg);
+}
+
+.quality-flex {
+  display: flex;
+  align-items: center;
 }
 
 h3 {
-  display: inline;
   font-family: 'Roboto Slab', serif;
   color: #6D6E71;
   font-size: .8em;
+  margin-left: 3em;
+  width: 15em;
+  text-align: left;
 }
 
 .downvote-icon {
   margin: 0 .5em;
+  background-image: url(downvote.svg);
+}
+
+.downvote-icon:hover {
+  background-image: url(downvote-hover.svg);
+}
+
+.downvote-icon:focus {
+  outline: none;
+}
+
+.upvote-icon {
+  margin: 0 .5em;
+  background-image: url(upvote.svg);
+}
+
+.upvote-icon:hover {
+  background-image: url(upvote-hover.svg);
+}
+
+.upvote-icon:focus {
+  outline: none;
 }
 
 .quality {
