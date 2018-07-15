@@ -15,13 +15,54 @@ header {
 
 h1 {
   color: #00A79D;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto Slab', serif;
   font-weight: 700;
   text-align: center;
+  padding: .5em;
+  font-size: 2.3em;
 }
 
 span {
   color: #6D6E71;
+}
+
+input {
+  border: .1em solid #BFC0C2;
+}
+
+.form-elements {
+  display: block;
+  width: 55%;
+  padding: .2em 0 .2em .4em;
+  font-size: 1em;
+  margin: auto;
+  margin-bottom: .6em;
+  color: #BFC0C2;
+}
+
+.form-elements::placeholder {
+  color: #BFC0C2;
+}
+
+.form-elements:focus {
+  outline: none;
+}
+
+.save-button {
+  background-color: #00A79D;
+  color: #FFFFFF;
+  text-align: center;
+  border: #00A79D;
+  padding: .4em;
+  margin-bottom: 1.4em;
+}
+
+.save-button:disabled {
+  color: #D3D3D3;
+}
+
+.save-button:hover {
+  background-color: #045E55;
 }
 
 main {
@@ -30,26 +71,57 @@ main {
   height: 70%;
 }
 
-button {
-  color: #00A79D;
-  text-align: center;
+.search-input {
+  margin: 1.4em auto;
 }
 
-button:disabled {
-  color: #D3D3D3;
+.populated-ideas-container {
+  width: 55%;
+  margin: auto;
 }
 
-button:hover {
-  color: #045E55;
+.populated-ideas {
+  border-bottom: .1em solid #D1D3D4;
+  padding: 1em 0;
 }
 
 .icons {
-  height: 45px;
-  width: 45px;
+  height: 1.5em;
+  width: 1.5em;
 }
 
-/*Example text: #6D6E71
-Example p text: #939598
-Quality text: #6D6E71
-Border: #D1D3D4
-*/
+.idea-title {
+  display: inline;
+  font-family: 'Roboto Slab', serif;
+  margin-bottom: 1.4em;
+  color: #6D6E71;
+  font-size: 1.5em;
+  }
+
+p {
+  font-family: 'Open Sans', sans-serif;
+  padding: .5em 0 1em 0;
+  color: #939598;
+}
+
+.delete-button {
+  float: right;
+  margin: .25em;
+}
+
+h3 {
+  display: inline;
+  font-family: 'Roboto Slab', serif;
+  color: #6D6E71;
+  font-size: .8em;
+}
+
+.downvote-icon {
+  margin: 0 .5em;
+}
+
+.quality {
+  font-family: 'Open Sans', sans-serif;
+  color: #6D6E71;
+  font-size: .9em;
+}

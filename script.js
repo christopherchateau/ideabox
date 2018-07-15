@@ -39,12 +39,12 @@ function createNewIdeaCard() {
 
   $('.populated-ideas-container').prepend(
 
-    `<h2>${ideaTitle}</h2>
-     <button class="delete-button"> <img class="icons" src="delete.svg"></button>
+    `<article class="populated-ideas"><h2 class="idea-title">${ideaTitle}</h2>
+      <img class="icons delete-button" src="delete.svg">
      <p>${ideaBody}</p>
-     <img class="icons" src="upvote.svg"/>
-     <img class="icons" src="downvote.svg"/>
-     <h3>quality: ${ideaQuality}</h3>`
+     <img class="icons upvote-icon" src="upvote.svg"/>
+     <img class="icons downvote-icon" src="downvote.svg"/>
+     <h3>quality: <span class="quality">${ideaQuality}</span></h3></article>`
     );
 }
 
