@@ -1,22 +1,25 @@
 var titleInput = $('.title-input');
 var bodyInput = $('.body-input');
 var saveButton = $('.save-button');
-// var searchInput = $('.search-input');
-var deleteButton;
 var counter = 0;
-var cardArr = [];
-var qualityArr = ['swill', 'plausible', 'genius'];
-var idea;
-var container = $('.populated-ideas-container');
+var ideaArr = [];
 
+// var idea;
+// var searchInput = $('.search-input');
+// var container = $('.populated-ideas-container');
 
 titleInput.on('keyup', toggleSaveButton);
 bodyInput.on('keyup', toggleSaveButton);
 saveButton.on('click', saveNewIdea);
-$('.populated-ideas-container').click(deleteIdeaCard);
-$('.search-input').keyup(search);
-// $('[src="delete.svg"]').on('mouseover', deleteButtonToRed);
 
+$('.populated-ideas-container').on('click', '.upvote-icon', qualityUpgrade);
+$('.populated-ideas-container').on('click', '.downvote-icon', qualityDowngrade);
+$('.populated-ideas-container').on('click', '.delete-button', deleteIdeaCard);
+$('.search-input').on('keyup', search);
+
+function clearAllCards() {
+  $('.populated-ideas-container').text('');
+}
 
 function saveNewIdea(e) {
   e.preventDefault();
@@ -24,6 +27,10 @@ function saveNewIdea(e) {
   idea = new Idea(counter, titleInput.val(), bodyInput.val());
   idea.createIdeaCard();
   createNewIdeaCard();
+}
+  
+Idea.prototype.createIdeaCard = function() {
+  ideaArr.push(idea);
 }
 
 function Idea(id, title, body) {
@@ -40,52 +47,50 @@ function createNewIdeaCard() {
 
   $('.populated-ideas-container').prepend(
 
-    `<article class="populated-ideas"><h2 contenteditable="true" class="idea-title">${ideaTitle}</h2>
-     <button class="icons delete-button"></button>
-     <p contenteditable = "true">${ideaBody}</p>
-     <section class="quality-flex">
-     <button class="icons upvote-icon"</button>
-     <button class="icons downvote-icon"</button>
-     <h3>quality: <span class="quality">${ideaQuality}</span></h3>
-     </section></article>`
+    `<article id="${counter}" class="populated-ideas">
+      <div class="searchable">
+        <h2 contenteditable="true" class="idea-title">${ideaTitle}</h2>
+        <button class="icons delete-button"></button>
+        <p contenteditable = "true">${ideaBody}</p>
+      </div>
+      <section class="quality-flex">
+        <button class="icons upvote-icon"</button>
+        <button class="icons downvote-icon"</button>
+        <h3>quality: <span class="quality">${ideaQuality}</span></h3>
+      </section>
+     </article>`
     );
-}
 
-  
-Idea.prototype.createIdeaCard = function () {
-  cardArr.push(idea);
-}
-
-function deleteIdeaCard(e) {
-  if ($(e.target).is('.delete-button')) {
-    $(e.target).parent().remove();
-    // localStorage().removeItem();
-  }
-  if ($(e.target).is('.downvote-icon')) {
-    console.log((e.target))
-    qualityDowngrade();  
-  }
-  if ($(e.target).is('.upvote-icon')) {
-    qualityUpgrade();  
-  }
+    // var stringifiedObj = JSON.stringify(idea);
+    // localStorage.setItem(counter, stringifiedObj);
 }
 
 function qualityUpgrade() {
-  if (idea.quality === 'swill') {
-    (idea.quality = 'plausible');
-  } else if (idea.quality === 'plausible') {
-    (idea.quality = 'genius');
+  var clickedIdea = $(this).closest('.populated-ideas');
+  var clickedIdeaQuality = clickedIdea.find('.quality').text();
+  
+  if (clickedIdeaQuality === 'swill') {
+    clickedIdea.find('.quality').text('plausible');
+  }    
+  if (clickedIdeaQuality === 'plausible') {
+    clickedIdea.find('.quality').text('genuis');
   }
-  $('.quality').text(idea.quality);
 }
 
 function qualityDowngrade() {
-  if (idea.quality === 'genius') {
-    (idea.quality = 'plausible');
-  } else if (idea.quality === 'plausible') {
-    (idea.quality = 'swill');
+  var clickedIdea = $(this).closest('.populated-ideas');
+  var clickedIdeaQuality = clickedIdea.find('.quality').text();
+
+  if (clickedIdeaQuality === 'genuis') {
+    clickedIdea.find('.quality').text('plausible');
+  }    
+  if (clickedIdeaQuality === 'plausible') {
+    clickedIdea.find('.quality').text('swill');
   }
-  $('.quality').text(idea.quality);
+}
+
+function deleteIdeaCard(e) {
+  $(e.target).parent().parent().remove();
 }
 
 function toggleSaveButton() {
@@ -97,29 +102,14 @@ function toggleSaveButton() {
 }
 
 function search() {
-  var searchInput = $('.search-input');
-  var populatedIdeas = $('.populated-ideas');
-  var filter = searchInput.val().toUpperCase();
-    console.log(populatedIdeas);
+  var filter = $(this).val();
 
+  $('.searchable').each(function() {
+    if($(this).text().search(new RegExp(filter, 'i')) !== -1) {
 
-  // for (var i = 0; i < populatedIdeas.length; i++) {
-  //   var input = populatedIdeas[i].getElementsByTagName('article');
-  //   if (input.html().toUpperCase().indexOf(filter) > -1) {
-  //     populatedIdeas[i].style.display = '';
-  //   } else {
-  //     populatedIdeas[i].style.display = 'none';
-  //   }
-  // }
-
-  // result = $('searchInput').val();
-  // $('.search-input').each(function() {
-  //   $('.populated-ideas:contains("'+result+'")').show();
-
-  //   if ($(this).text().toUpperCase().indexOf(result.toUpperCase()) !== -1) {
-  //     $(this).show();
-  //}
-  //});
+      $(this).parent().fadeIn();
+      } else {
+      $(this).parent().fadeOut();
+    }
+  });
 }
-
-
