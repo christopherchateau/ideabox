@@ -41,7 +41,7 @@ function createNewIdeaCard() {
   $('.populated-ideas-container').prepend(
 
     `<article class="populated-ideas"><h2 contenteditable="true" class="idea-title">${ideaTitle}</h2>
-     <button class="delete-button"></button>
+     <button class="icons delete-button"></button>
      <p contenteditable = "true">${ideaBody}</p>
      <section class="quality-flex">
      <button class="icons upvote-icon"</button>
