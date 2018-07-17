@@ -1,10 +1,8 @@
 var titleInput = $('.title-input');
 var bodyInput = $('.body-input');
 var saveButton = $('.save-button');
-var counter = 0;
-var ideaArr = [];
-
 // var idea;
+
 // var searchInput = $('.search-input');
 // var container = $('.populated-ideas-container');
 
@@ -12,92 +10,140 @@ titleInput.on('keyup', toggleSaveButton);
 bodyInput.on('keyup', toggleSaveButton);
 saveButton.on('click', saveNewIdea);
 
+$(document).ready(populateStoredCards(findStoredCards()));
 $('.populated-ideas-container').on('click', '.upvote-icon', qualityUpgrade);
 $('.populated-ideas-container').on('click', '.downvote-icon', qualityDowngrade);
 $('.populated-ideas-container').on('click', '.delete-button', deleteIdeaCard);
+$('.populated-ideas-container').on('keyup', '.idea-title', updateEditedTitle);
+$('.populated-ideas-container').on('keyup', '.idea-body', updateEditedBody);
 $('.search-input').on('keyup', search);
 
-function clearAllCards() {
-  $('.populated-ideas-container').text('');
+function updateEditedTitle() {
+  var editedTitle = $(this).closest('.idea-title').text();
+  var clickedId = $(this).closest('.populated-ideas').attr('id');
+  var parsedObj = JSON.parse(localStorage.getItem(clickedId));
+
+  parsedObj.title = editedTitle;
+  localStorage.setItem(clickedId, JSON.stringify(parsedObj));
+}
+
+function updateEditedBody() {
+  var editedBody = $(this).closest('.idea-body').text();
+  var clickedId = $(this).closest('.populated-ideas').attr('id');
+  var parsedObj = JSON.parse(localStorage.getItem(clickedId));
+
+  parsedObj.body = editedBody;
+  localStorage.setItem(clickedId, JSON.stringify(parsedObj));
 }
 
 function saveNewIdea(e) {
   e.preventDefault();
-  counter++;
-  idea = new Idea(counter, titleInput.val(), bodyInput.val());
-  idea.createIdeaCard();
-  createNewIdeaCard();
-}
+  var idea = new Idea(Date.now(), titleInput.val(), bodyInput.val());
   
-Idea.prototype.createIdeaCard = function() {
-  ideaArr.push(idea);
+  storeIdeas(idea);
+  toggleSaveButton();
+}
+
+function storeIdeas(idea) {
+  var stringified = JSON.stringify(idea);
+  localStorage.setItem(idea.id, stringified);
+  retrieveStorage(idea.id);
+}
+
+function retrieveStorage(id) {
+  var retrievedObj = localStorage.getItem(id);
+  var parsedObj = JSON.parse(retrievedObj);
+  clearInputFields();
+  createNewIdeaCard(parsedObj.id, parsedObj.title, parsedObj.body, parsedObj.quality);
+}
+
+function populateStoredCards(keyArr) {
+  for (var i = 0; i < keyArr.length; i++) {
+    retrieveStorage(keyArr[i].id);
+  }
+}
+
+function findStoredCards() {
+  var ideaArr = [];
+  var objKeys = Object.keys(localStorage);
+
+  for (var i = 0; i < objKeys.length; i++) {
+    ideaArr.push(JSON.parse(localStorage.getItem(objKeys[i])));
+  }
+  return ideaArr;
 }
 
 function Idea(id, title, body) {
-  this.id = id;
+  this.id = Date.now();
   this.title = title;
   this.body = body;
   this.quality = 'swill';
 }
 
-function createNewIdeaCard() {
-  var ideaTitle = idea.title;
-  var ideaBody = idea.body;
-  var ideaQuality = idea.quality;
+function createNewIdeaCard(id, title, body, quality) {
 
   $('.populated-ideas-container').prepend(
 
-    `<article id="${counter}" class="populated-ideas">
+    `<article id="${id}" class="populated-ideas">
       <div class="searchable">
-        <h2 contenteditable="true" class="idea-title">${ideaTitle}</h2>
+        <h2 contenteditable="true" class="idea-title">${title}</h2>
         <button class="icons delete-button"></button>
-        <p contenteditable = "true">${ideaBody}</p>
+        <p contenteditable = "true" class="idea-body">${body}</p>
       </div>
       <section class="quality-flex">
         <button class="icons upvote-icon"</button>
         <button class="icons downvote-icon"</button>
-        <h3>quality: <span class="quality">${ideaQuality}</span></h3>
+        <h3>quality: <span class="quality">${quality}</span></h3>
       </section>
      </article>`
     );
-
-    // var stringifiedObj = JSON.stringify(idea);
-    // localStorage.setItem(counter, stringifiedObj);
 }
 
 function qualityUpgrade() {
   var clickedIdea = $(this).closest('.populated-ideas');
   var clickedIdeaQuality = clickedIdea.find('.quality').text();
+
+  var clickedId = $(this).closest('.populated-ideas').attr('id');
+  var parsedObj = JSON.parse(localStorage.getItem(clickedId));
   
-  if (clickedIdeaQuality === 'swill') {
-    clickedIdea.find('.quality').text('plausible');
+  if (parsedObj.quality === 'swill') {
+    parsedObj.quality = 'plausible';
   }    
-  if (clickedIdeaQuality === 'plausible') {
-    clickedIdea.find('.quality').text('genuis');
+  else if (parsedObj.quality === 'plausible') {
+    parsedObj.quality = 'genius';
   }
+  localStorage.setItem(clickedId, JSON.stringify(parsedObj));
+  clickedIdea.find('.quality').text(parsedObj.quality);
 }
 
 function qualityDowngrade() {
   var clickedIdea = $(this).closest('.populated-ideas');
   var clickedIdeaQuality = clickedIdea.find('.quality').text();
 
-  if (clickedIdeaQuality === 'genuis') {
-    clickedIdea.find('.quality').text('plausible');
+  var clickedId = $(this).closest('.populated-ideas').attr('id');
+  var parsedObj = JSON.parse(localStorage.getItem(clickedId));
+  
+  if (parsedObj.quality === 'genius') {
+    parsedObj.quality = 'plausible';
   }    
-  if (clickedIdeaQuality === 'plausible') {
-    clickedIdea.find('.quality').text('swill');
+  else if (parsedObj.quality === 'plausible') {
+    parsedObj.quality = 'swill';
   }
+  localStorage.setItem(clickedId, JSON.stringify(parsedObj));
+  clickedIdea.find('.quality').text(parsedObj.quality);
 }
 
 function deleteIdeaCard(e) {
   $(e.target).parent().parent().remove();
+  var ideaId = $(this).closest('.populated-ideas').attr('id');
+  localStorage.removeItem(JSON.parse(ideaId));
 }
 
 function toggleSaveButton() {
   if (titleInput.val() !== '' && bodyInput.val() !== '') {
-    $(".save-button").prop("disabled", false);
+    $('.save-button').prop('disabled', false);
   } else {
-    $(".save-button").prop("disabled", true);
+    $('.save-button').prop('disabled', true);
   }
 }
 
@@ -112,4 +158,9 @@ function search() {
       $(this).parent().fadeOut();
     }
   });
+}
+
+function clearInputFields() {
+  $('.title-input').val('');
+  $('.body-input').val('');
 }

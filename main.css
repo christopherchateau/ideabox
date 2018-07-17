@@ -36,14 +36,14 @@ input, textarea {
 }
 
 .form-elements {
+  color: #BFC0C2;
   display: block;
-  width: 55%;
-  height: 2em;
-  padding: .2em 0 .2em .4em;
   font-size: 2em;
+  height: 2em;
   margin: auto;
   margin-bottom: 1.2em;
-  color: #BFC0C2;
+  padding: .2em 0 .2em .4em;
+  width: 55%;
 }
 
 .form-elements::placeholder {
@@ -119,6 +119,7 @@ p:focus {
   float: right;
   margin: .25em;
   border: none;
+  border-radius: 50%;
 }
 
 .delete-button:focus {
@@ -148,6 +149,7 @@ h3 {
 .downvote-icon {
   margin: 0 .5em;
   background-image: url(downvote.svg);
+  border-radius: 50%;
 }
 
 .downvote-icon:hover {
@@ -159,8 +161,9 @@ h3 {
 }
 
 .upvote-icon {
-  margin: 0 .5em;
   background-image: url(upvote.svg);
+  border-radius: 50%;
+  margin: 0 .5em;
 }
 
 .upvote-icon:hover {
@@ -172,8 +175,8 @@ h3 {
 }
 
 .quality {
-  font-family: 'Open Sans', sans-serif;
   color: #6D6E71;
+  font-family: 'Open Sans', sans-serif;
   font-size: .9em;
 }
 
@@ -182,7 +185,7 @@ h3 {
     width: 90%;
   }
 
-  .body-input {
+  .body-input { 
     height: 4em;
   }
 
