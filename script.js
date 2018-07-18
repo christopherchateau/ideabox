@@ -9,32 +9,10 @@ $('.body-input').on('keyup', toggleSaveButton);
 $('.save-button').on('click', saveNewIdea);
 $('.search-input').on('keyup', search);
 
-function saveNewIdea(e) {
-  e.preventDefault();
-  var idea = new Idea(Date.now(), $('.title-input').val(), $('.body-input').val());
-  
-  storeIdeas(idea);
-  toggleSaveButton();
-}
-
-function storeIdeas(idea) {
-  var stringified = JSON.stringify(idea);
-  localStorage.setItem(idea.id, stringified);
-  retrieveStorage(idea.id);
-}
-
 function populateStoredCards(keyArr) {
   for (var i = 0; i < keyArr.length; i++) {
     retrieveStorage(keyArr[i].id);
   }
-}
-
-function retrieveStorage(id) {
-  var retrievedObj = localStorage.getItem(id);
-  var parsedObj = JSON.parse(retrievedObj);
-
-  createNewIdeaCard(parsedObj.id, parsedObj.title, parsedObj.body, parsedObj.quality);
-  clearInputFields();
 }
 
 function findStoredCards() {
@@ -42,9 +20,23 @@ function findStoredCards() {
   var objKeys = Object.keys(localStorage);
 
   for (var i = 0; i < objKeys.length; i++) {
-    ideaArr.push(JSON.parse(localStorage.getItem(objKeys[i])));
+    ideaArr.push(getNParse(objKeys[i]));
   }
   return ideaArr;
+}
+
+function saveNewIdea(e) {
+  e.preventDefault();
+  var idea = new Idea(Date.now(), $('.title-input').val(), $('.body-input').val());
+  storeIdea(idea);
+  retrieveStorage(idea.id);
+  toggleSaveButton();
+}
+
+function retrieveStorage(id) {
+  var parsedObj = getNParse(id);
+  createNewIdeaCard(parsedObj.id, parsedObj.title, parsedObj.body, parsedObj.quality);
+  clearInputFields();
 }
 
 function Idea(id, title, body) {
@@ -55,10 +47,9 @@ function Idea(id, title, body) {
 }
 
 function createNewIdeaCard(id, title, body, quality) {
-
   $('.populated-ideas-container').prepend(
 
-    `<article id="${id}" class="populated-ideas">
+   `<article id="${id}" class="populated-ideas">
       <div class="searchable">
         <h2 contenteditable="true" class="idea-title">${title}</h2>
         <button class="icons delete-button"></button>
@@ -69,16 +60,14 @@ function createNewIdeaCard(id, title, body, quality) {
         <button class="icons downvote-icon"</button>
         <h3>quality: <span class="quality">${quality}</span></h3>
       </section>
-     </article>`
-    );
+    </article>`
+  );
 }
 
 function qualityUpgrade() {
   var clickedIdea = $(this).closest('.populated-ideas');
-  var clickedIdeaQuality = clickedIdea.find('.quality').text();
-
-  var clickedId = $(this).closest('.populated-ideas').attr('id');
-  var parsedObj = JSON.parse(localStorage.getItem(clickedId));
+  var clickedId = clickedIdea.attr('id');
+  var parsedObj = getNParse(clickedId);
   
   if (parsedObj.quality === 'swill') {
     parsedObj.quality = 'plausible';
@@ -86,16 +75,14 @@ function qualityUpgrade() {
   else if (parsedObj.quality === 'plausible') {
     parsedObj.quality = 'genius';
   }
-  localStorage.setItem(clickedId, JSON.stringify(parsedObj));
+  storeIdea(parsedObj);
   clickedIdea.find('.quality').text(parsedObj.quality);
 }
 
 function qualityDowngrade() {
   var clickedIdea = $(this).closest('.populated-ideas');
-  var clickedIdeaQuality = clickedIdea.find('.quality').text();
-
-  var clickedId = $(this).closest('.populated-ideas').attr('id');
-  var parsedObj = JSON.parse(localStorage.getItem(clickedId));
+  var clickedId = clickedIdea.attr('id');
+  var parsedObj = getNParse(clickedId);
   
   if (parsedObj.quality === 'genius') {
     parsedObj.quality = 'plausible';
@@ -103,7 +90,7 @@ function qualityDowngrade() {
   else if (parsedObj.quality === 'plausible') {
     parsedObj.quality = 'swill';
   }
-  localStorage.setItem(clickedId, JSON.stringify(parsedObj));
+  storeIdea(parsedObj);
   clickedIdea.find('.quality').text(parsedObj.quality);
 }
 
@@ -116,19 +103,18 @@ function deleteIdeaCard(e) {
 function updateEditedTitle() {
   var editedTitle = $(this).closest('.idea-title').text();
   var clickedId = $(this).closest('.populated-ideas').attr('id');
-  var parsedObj = JSON.parse(localStorage.getItem(clickedId));
-
+  var parsedObj = getNParse(clickedId);
   parsedObj.title = editedTitle;
-  localStorage.setItem(clickedId, JSON.stringify(parsedObj));
+  storeIdea(parsedObj);
 }
 
 function updateEditedBody() {
   var editedBody = $(this).closest('.idea-body').text();
   var clickedId = $(this).closest('.populated-ideas').attr('id');
-  var parsedObj = JSON.parse(localStorage.getItem(clickedId));
+  var parsedObj = getNParse(clickedId);
 
   parsedObj.body = editedBody;
-  localStorage.setItem(clickedId, JSON.stringify(parsedObj));
+  storeIdea(parsedObj);
 }
 
 function toggleSaveButton() {
@@ -150,9 +136,16 @@ function search() {
   });
 }
 
+function getNParse(id) {
+  return JSON.parse(localStorage.getItem(id));
+}
+
+function storeIdea(idea) {
+  var stringified = JSON.stringify(idea);
+  localStorage.setItem(idea.id, stringified);
+}
+
 function clearInputFields() {
   $('.title-input').val('');
   $('.body-input').val('');
 }
-
-clearInputFields();
