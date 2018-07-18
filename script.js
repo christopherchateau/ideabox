@@ -1,44 +1,17 @@
-var titleInput = $('.title-input');
-var bodyInput = $('.body-input');
-var saveButton = $('.save-button');
-// var idea;
-
-// var searchInput = $('.search-input');
-// var container = $('.populated-ideas-container');
-
-titleInput.on('keyup', toggleSaveButton);
-bodyInput.on('keyup', toggleSaveButton);
-saveButton.on('click', saveNewIdea);
-
 $(document).ready(populateStoredCards(findStoredCards()));
 $('.populated-ideas-container').on('click', '.upvote-icon', qualityUpgrade);
 $('.populated-ideas-container').on('click', '.downvote-icon', qualityDowngrade);
 $('.populated-ideas-container').on('click', '.delete-button', deleteIdeaCard);
 $('.populated-ideas-container').on('keyup', '.idea-title', updateEditedTitle);
 $('.populated-ideas-container').on('keyup', '.idea-body', updateEditedBody);
+$('.title-input').on('keyup', toggleSaveButton);
+$('.body-input').on('keyup', toggleSaveButton);
+$('.save-button').on('click', saveNewIdea);
 $('.search-input').on('keyup', search);
-
-function updateEditedTitle() {
-  var editedTitle = $(this).closest('.idea-title').text();
-  var clickedId = $(this).closest('.populated-ideas').attr('id');
-  var parsedObj = JSON.parse(localStorage.getItem(clickedId));
-
-  parsedObj.title = editedTitle;
-  localStorage.setItem(clickedId, JSON.stringify(parsedObj));
-}
-
-function updateEditedBody() {
-  var editedBody = $(this).closest('.idea-body').text();
-  var clickedId = $(this).closest('.populated-ideas').attr('id');
-  var parsedObj = JSON.parse(localStorage.getItem(clickedId));
-
-  parsedObj.body = editedBody;
-  localStorage.setItem(clickedId, JSON.stringify(parsedObj));
-}
 
 function saveNewIdea(e) {
   e.preventDefault();
-  var idea = new Idea(Date.now(), titleInput.val(), bodyInput.val());
+  var idea = new Idea(Date.now(), $('.title-input').val(), $('.body-input').val());
   
   storeIdeas(idea);
   toggleSaveButton();
@@ -50,17 +23,18 @@ function storeIdeas(idea) {
   retrieveStorage(idea.id);
 }
 
-function retrieveStorage(id) {
-  var retrievedObj = localStorage.getItem(id);
-  var parsedObj = JSON.parse(retrievedObj);
-  clearInputFields();
-  createNewIdeaCard(parsedObj.id, parsedObj.title, parsedObj.body, parsedObj.quality);
-}
-
 function populateStoredCards(keyArr) {
   for (var i = 0; i < keyArr.length; i++) {
     retrieveStorage(keyArr[i].id);
   }
+}
+
+function retrieveStorage(id) {
+  var retrievedObj = localStorage.getItem(id);
+  var parsedObj = JSON.parse(retrievedObj);
+
+  createNewIdeaCard(parsedObj.id, parsedObj.title, parsedObj.body, parsedObj.quality);
+  clearInputFields();
 }
 
 function findStoredCards() {
@@ -139,8 +113,26 @@ function deleteIdeaCard(e) {
   localStorage.removeItem(JSON.parse(ideaId));
 }
 
+function updateEditedTitle() {
+  var editedTitle = $(this).closest('.idea-title').text();
+  var clickedId = $(this).closest('.populated-ideas').attr('id');
+  var parsedObj = JSON.parse(localStorage.getItem(clickedId));
+
+  parsedObj.title = editedTitle;
+  localStorage.setItem(clickedId, JSON.stringify(parsedObj));
+}
+
+function updateEditedBody() {
+  var editedBody = $(this).closest('.idea-body').text();
+  var clickedId = $(this).closest('.populated-ideas').attr('id');
+  var parsedObj = JSON.parse(localStorage.getItem(clickedId));
+
+  parsedObj.body = editedBody;
+  localStorage.setItem(clickedId, JSON.stringify(parsedObj));
+}
+
 function toggleSaveButton() {
-  if (titleInput.val() !== '' && bodyInput.val() !== '') {
+  if ($('.title-input').val() !== '' && $('.body-input').val() !== '') {
     $('.save-button').prop('disabled', false);
   } else {
     $('.save-button').prop('disabled', true);
@@ -149,12 +141,10 @@ function toggleSaveButton() {
 
 function search() {
   var filter = $(this).val();
-
   $('.searchable').each(function() {
     if($(this).text().search(new RegExp(filter, 'i')) !== -1) {
-
       $(this).parent().fadeIn();
-      } else {
+    } else {
       $(this).parent().fadeOut();
     }
   });
@@ -164,3 +154,5 @@ function clearInputFields() {
   $('.title-input').val('');
   $('.body-input').val('');
 }
+
+clearInputFields();

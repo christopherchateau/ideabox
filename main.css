@@ -16,10 +16,21 @@ header {
 h1 {
   color: #00A79D;
   font-family: 'Roboto Slab', serif;
-  font-weight: 700;
-  text-align: center;
-  padding: .6em;
   font-size: 5em;
+  font-weight: 700;
+  padding: .6em;
+  text-align: center;
+}
+
+h3 {
+  color: #6D6E71;
+  font-family: 'Roboto Slab', serif;
+  font-size: 1.4em;
+  left: 3em;
+  pointer-events: none;
+  position: relative;
+  text-align: left;
+  width: 15em;
 }
 
 main {
@@ -33,6 +44,16 @@ span {
 
 input, textarea {
   border: .1em solid #BFC0C2;
+}
+
+p {
+  color: #939598;
+  font-family: 'Open Sans', sans-serif;
+  padding: .5em 0 1em 0;
+}
+
+p:focus {
+  outline: none;
 }
 
 .form-elements {
@@ -56,11 +77,11 @@ input, textarea {
 
 .save-button {
   background-color: #00A79D;
-  color: #FFFFFF;
-  text-align: center;
   border: #00A79D;
-  padding: .4em;
+  color: #FFFFFF;
   margin-bottom: 1.4em;
+  padding: .4em;
+  text-align: center;
 }
 
 .save-button:disabled {
@@ -77,8 +98,8 @@ input, textarea {
 }
 
 .populated-ideas-container {
-  width: 55%;
   margin: auto;
+  width: 55%;
 }
 
 .populated-ideas {
@@ -87,39 +108,29 @@ input, textarea {
 }
 
 .icons {
+  border: none;
   height: 30px;
   width: 30px;
-  border: none;
 }
 
 .idea-title {
+  color: #6D6E71;
   display: inline;
   font-family: 'Roboto Slab', serif;
-  margin-bottom: 1.4em;
-  color: #6D6E71;
   font-size: 2em;
-  }
+  margin-bottom: 1.4em;
+}
 
 .idea-title:focus {
   outline: none;
 }
 
-p {
-  font-family: 'Open Sans', sans-serif;
-  padding: .5em 0 1em 0;
-  color: #939598;
-}
-
-p:focus {
-  outline: none;
-}
-
 .delete-button {
   background-image: url(delete.svg);
-  float: right;
-  margin: .25em;
   border: none;
   border-radius: 50%;
+  float: right;
+  margin: .25em;
 }
 
 .delete-button:focus {
@@ -131,25 +142,14 @@ p:focus {
 }
 
 .quality-flex {
-  display: flex;
   align-items: center;
-}
-
-h3 {
-  font-family: 'Roboto Slab', serif;
-  color: #6D6E71;
-  font-size: 1.4em;
-  width: 15em;
-  text-align: left;
-  position: relative;
-  left: 3em;
-  pointer-events: none;
+  display: flex;
 }
 
 .downvote-icon {
-  margin: 0 .5em;
   background-image: url(downvote.svg);
   border-radius: 50%;
+  margin: 0 .5em;
 }
 
 .downvote-icon:hover {
@@ -181,6 +181,12 @@ h3 {
 }
 
 @media screen and (max-width: 800px) {
+  
+  h1 {
+    font-size: 3em;
+    padding: .2em;
+  }
+  
   .form-elements {
     width: 90%;
   }
@@ -190,12 +196,7 @@ h3 {
   }
 
   .populated-ideas-container {
-  width: 90%;
-  }
-
-  h1 {
-    font-size: 3em;
-    padding: .2em;
+    width: 90%;
   }
 
   .form-elements {
