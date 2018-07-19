@@ -10,12 +10,6 @@ $('.body-input').on('keyup', toggleSaveButton);
 $('.save-button').on('click', saveNewIdea);
 $('.search-input').on('keyup', search);
 
-function populateStoredCards(keyArr) {
-  for (var i = 0; i < keyArr.length; i++) {
-    retrieveStorage(keyArr[i].id);
-  }
-}
-
 function findStoredCards() {
   var ideaArr = [];
   var objKeys = Object.keys(localStorage);
@@ -25,18 +19,27 @@ function findStoredCards() {
   return ideaArr;
 }
 
+function populateStoredCards(keyArr) {
+  for (var i = 0; i < keyArr.length; i++) {
+    prepareIdeaCard(keyArr[i].id);
+  }
+}
+
 function saveNewIdea(e) {
   e.preventDefault();
   var idea = new Idea(Date.now(), $('.title-input').val(), $('.body-input').val());
+  wipeHTMLCards();
+  populateStoredCards(findStoredCards());
   storeIdea(idea);
-  retrieveStorage(idea.id);
-  toggleSaveButton();
+  prepareIdeaCard(idea.id);
 }
 
-function retrieveStorage(id) {
+function prepareIdeaCard(id) {
   var parsedObj = getNParse(id);
   createNewIdeaCard(parsedObj.id, parsedObj.title, parsedObj.body, parsedObj.quality);
+  toggleSaveButton();
   clearInputFields();
+  $('.title-input').focus();
 }
 
 function Idea(id, title, body) {
@@ -51,9 +54,9 @@ function createNewIdeaCard(id, title, body, quality) {
 
    `<article id="${id}" class="populated-ideas">
       <div class="searchable">
-        <h2 contenteditable="true" class="idea-title">${title}</h2>
+        <h2 contenteditable="true" spellcheck="false" class="idea-title">${title}</h2>
         <button class="icons delete-button"></button>
-        <p contenteditable = "true" class="idea-body">${body}</p>
+        <p contenteditable ="true" spellcheck="false" class="idea-body">${body}</p>
       </div>
       <section class="quality-flex">
         <button class="icons upvote-icon"</button>
@@ -81,9 +84,10 @@ function downVote() {
 }
 
 function deleteIdeaCard(e) {
-  $(e.target).parent().parent().remove();
-  var ideaId = $(this).closest('.populated-ideas').attr('id');
-  localStorage.removeItem(JSON.parse(ideaId));
+  $(e.target).parent().parent().slideUp(500);
+  var clickedIdea = $(this).closest('.populated-ideas');
+  clickedIdea.remove();
+  localStorage.removeItem(JSON.parse(clickedIdea.attr('id')));
 }
 
 function updateEditedTitle(e) {
@@ -117,9 +121,9 @@ function toggleSaveButton() {
 }
 
 function search() {
-  var filter = $(this).val();
+  var lowerCaseInput =  $('.search-input').val().toLowerCase();
   $('.searchable').each(function() {
-    if($(this).text().search(new RegExp(filter, 'i')) !== -1) {
+    if($(this).text().toLowerCase().indexOf(lowerCaseInput) !== -1) {
       $(this).parent().fadeIn();
     } else {
       $(this).parent().fadeOut();
@@ -157,6 +161,10 @@ function storeIdea(idea) {
 function clearInputFields() {
   $('.title-input').val('');
   $('.body-input').val('');
+  $('.search-input').val('');
+}
+function wipeHTMLCards() {
+  $('.populated-ideas-container').html('');
 }
 
 function disableReturn(e) {
